@@ -4,50 +4,33 @@
 #include <math.h>
 using namespace std;
 
-class Solution9
+class Solution8
 {
 public:
-    bool isMatch(string s, string p)
+    bool isPalindrome(int x)
     {
-        int m = s.size();
-        int n = p.size();
-
-        auto matches = [&](int i, int j)
+        if (x < 0)
+            return false;
+        else if (x == 0)
+            return true;
+        else if (x > 0)
         {
-            if (i == 0)
+            vector<int> breakUp;
+            int temp = 0;
+            int n = 1;
+            while(x != 0)
             {
-                return false;
+                temp = x%10; //计算出最后一位
+                breakUp.push_back(temp);
+                x = x - temp;
+                x /= 10;
             }
-            if (p[j - 1] == '.')
+            for(int i = 0,j = breakUp.size()-1; i < j;i++,j--)
             {
-                return true;
+                if(breakUp[i] == breakUp[j]) ;
+                else return false;
             }
-            return s[i - 1] == p[j - 1];
-        };
-
-        vector<vector<int>> f(m + 1, vector<int>(n + 1));
-        f[0][0] = true;
-        for (int i = 0; i <= m; ++i)
-        {
-            for (int j = 1; j <= n; ++j)
-            {
-                if (p[j - 1] == '*')
-                {
-                    f[i][j] |= f[i][j - 2];
-                    if (matches(i, j - 1))
-                    {
-                        f[i][j] |= f[i - 1][j];
-                    }
-                }
-                else
-                {
-                    if (matches(i, j))
-                    {
-                        f[i][j] |= f[i - 1][j - 1];
-                    }
-                }
-            }
+            return true;
         }
-        return f[m][n];
     }
 };

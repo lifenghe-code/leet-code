@@ -1,83 +1,69 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
-class Solution5
+class Solution4
 {
 public:
-    string convert(string s, int numRows)
+    string longestPalindrome(string s)
     {
-        int inputLength = s.length();
-        char **result = new char *[numRows];
-        for (int i = 0; i < numRows; i++)
+        string result;
+        int length = s.length();
+        int head = 0;
+        int tail = 0;
+        int distance = 0;
+        vector<int> theSubscript;
+        for (int i = 0; i < length; i++)
         {
-            result[i] = new char[inputLength]{'?'};
-        }
-        string result_;
-        int mode = 0; // 0代表直线，1代表斜线
-        int current = 0;
-        int column = 0;
-        int line = 0;
-        for (; line < numRows;)
-        {
-            if (mode == 0)
+            theSubscript.clear();
+            int tmp = i;
+            for (int j = i+1; j < length; j++)
             {
-                if (current < inputLength)
+                if (s[i] == s[j])
                 {
-                    result[line][column] = s[current];
-                    line++;
-                    current++;
+                    theSubscript.push_back(j);
                 }
-                else
-                    break;
             }
-            else if (mode == 1)
-            {
 
-                if (current < inputLength)
+            for(auto it = theSubscript.begin();it != theSubscript.end();it++)
+            {
+                int logo = 0;      //0代表符合条件结束循环，1代表不符合条件中途退出循环
+                int a = *it;
+                tmp = i;
+                while(tmp < a)
                 {
-                    result[line][column] = s[current];
-                    line--;
-                    column++;
-                    current++;
+                    if(s[tmp] == s[a])
+                    {
+                        tmp++;
+                        a--;
+                    }
+                    else
+                    {
+                        logo = 1;
+                        break;
+                    }
+                }
+                if(logo == 0)
+                {
+                    if(distance < (*it)-i+1)
+                    {
+                        head = i;
+                        tail = *it;
+                        distance = (*it)-i+1;
+                    }
                 }
                 else
-                    break;
-            }
-            if (line == numRows)
-            {
-                if(line == 1)
                 {
-                    mode = 0;
-                    line = 0;
-                    column++;
-                }
-                else
-                {
-                    mode = 1;
-                    line -= 2;
-                    column++;
+
                 }
             }
-            else if (line == -1)
-            {
-                mode = 0;
-                column--;
-                line += 2;
-            }
+
         }
-        for (int i = 0; i < numRows; i++)
+        for(int i = head; i <= tail;i++)
         {
-            for (int j = 0; j < inputLength; j++)
-            {
-                if ((result[i][j] >= 65 && result[i][j] <= 90) || (result[i][j] >= 97 && result[i][j] <= 122) || result[i][j] == 46 || result[i][j] == 44)
-                {
-                    result_ += result[i][j];
-                }
-                else
-                    ;
-            }
+            result += s[i];
         }
-        return result_;
+        return result;
     }
 };

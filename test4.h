@@ -1,69 +1,59 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <vector>
-using namespace std;
-class Solution4
-{
+class Solution3 {
 public:
-    string longestPalindrome(string s)
-    {
-        string result;
-        int length = s.length();
-        int head = 0;
-        int tail = 0;
-        int distance = 0;
-        vector<int> theSubscript;
-        for (int i = 0; i < length; i++)
-        {
-            theSubscript.clear();
-            int tmp = i;
-            for (int j = i+1; j < length; j++)
-            {
-                if (s[i] == s[j])
-                {
-                    theSubscript.push_back(j);
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        if(nums1.size() == 0 && nums2.size() != 0){
+            int num = nums2.size();
+            if(num%2 == 0){
+                int a = num/2;
+                int b = a+1;
+                double result = (double)nums2[a-1]+((double)nums2[b-1]-(double)nums2[a-1])/2;
+                return result;
+            }
+            else {
+                int a = (num+1)/2;
+                double result = (double)nums2[a-1];
+                return result;
+            }
+        }
+        else if(nums1.size() != 0 && nums2.size() == 0){
+            int num = nums1.size();
+            if(num%2 == 0){
+                int a = num/2;
+                int b = a+1;
+                double result = (double)nums1[a-1]+((double)nums1[b-1]-(double)nums1[a-1])/2;
+                return result;
+            }
+            else {
+                int a = (num+1)/2;
+                double result = (double)nums1[a-1];
+                return result;
+            }
+        }
+        else {
+            for(auto it : nums2)
+                nums1.push_back(it);
+            for(auto it1 = nums1.end();it1 != nums1.begin();it1--){
+                for(auto it2 = nums1.begin();it2 < it1-1;it2++){
+                    if(*it2 > *(it2+1)){
+                        int tmp = *it2;
+                        *it2 = *(it2+1);
+                        *(it2+1) = tmp;
+                    }
                 }
             }
-
-            for(auto it = theSubscript.begin();it != theSubscript.end();it++)
-            {
-                int logo = 0;      //0代表符合条件结束循环，1代表不符合条件中途退出循环
-                int a = *it;
-                tmp = i;
-                while(tmp < a)
-                {
-                    if(s[tmp] == s[a])
-                    {
-                        tmp++;
-                        a--;
-                    }
-                    else
-                    {
-                        logo = 1;
-                        break;
-                    }
-                }
-                if(logo == 0)
-                {
-                    if(distance < (*it)-i+1)
-                    {
-                        head = i;
-                        tail = *it;
-                        distance = (*it)-i+1;
-                    }
-                }
-                else
-                {
-
-                }
+            int num = nums1.size();
+            if(num%2 == 0){
+                int a = num/2;
+                int b = a+1;
+                double result =(double)nums1[a-1]+((double)nums1[b-1]-(double)nums1[a-1])/2;
+                return result;
             }
-
+            else {
+                int a = (num+1)/2;
+                double result = (double)nums1[a-1];
+                return result;
+            }
         }
-        for(int i = head; i <= tail;i++)
-        {
-            result += s[i];
-        }
-        return result;
     }
 };

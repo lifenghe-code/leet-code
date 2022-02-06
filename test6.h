@@ -1,74 +1,83 @@
-#ifndef TEST6_H
-#define TEST6_H
-#include <vector>
+#pragma once
 #include <iostream>
-#include <math.h>
+#include <string>
 using namespace std;
-class Solution6
+class Solution5
 {
 public:
-    int reverse(int x)
+    string convert(string s, int numRows)
     {
-        int judge = 0; //0代表正数，1代表负数
-        vector<int> reference{2,1,4,7,4,8,3,6,4,8};
-        while (1)
+        int inputLength = s.length();
+        char **result = new char *[numRows];
+        for (int i = 0; i < numRows; i++)
         {
-            vector<int> result;
-            if (x > 0)
-            {
-                int n = 0;
-                int tmp = x;
-                while (tmp > 9)
-                {
-                    tmp = tmp / 10;
-                    n++;
-                }
-                int remainder = 0;
-                while (x != 0)
-                {
-                    remainder = x / pow(10, n);
-                    result.push_back(remainder);
-                    x = x - pow(10, n) * remainder;
-                    n--;
-                }
-                int num = result.size()-1;
-                for (int i = 0; i < result.size()/2;)
-                {
-                    swap(result[i],result[num]);
-                    i++;
-                    num--;
-                }
-
-                if(result.size()>=10)
-                {
-                    int i = 0;
-                    while(1)
-                    {
-                        if(result[i] == reference[i]) i++;
-                        else if(result[i] > reference[i]) return 0;
-                        else { break;}
-                        if(i == result.size()-1) break;
-                    }
-                }
-                num = result.size()-1;
-                int result_  = 0;
-                for(int i = 0; i < result.size(); i++)
-                {
-                    result_ += result[i]*pow(10,num);
-                    num--;
-                }
-                if (judge == 0 && result_ <= pow(2,31)-1) return result_;
-                else if (judge == 1 && -1*result_ >= -1*pow(2,31)) return result_*-1;
-                else return 0;
-            }
-            else if (x < 0 && x > -1*pow(2,31))
-            {
-                x = -1 * x;
-                judge = 1;
-            }
-            else if(x == -1*pow(2,31)) return 0;
-            else {return 0;}
+            result[i] = new char[inputLength]{'?'};
         }
+        string result_;
+        int mode = 0; // 0代表直线，1代表斜线
+        int current = 0;
+        int column = 0;
+        int line = 0;
+        for (; line < numRows;)
+        {
+            if (mode == 0)
+            {
+                if (current < inputLength)
+                {
+                    result[line][column] = s[current];
+                    line++;
+                    current++;
+                }
+                else
+                    break;
+            }
+            else if (mode == 1)
+            {
+
+                if (current < inputLength)
+                {
+                    result[line][column] = s[current];
+                    line--;
+                    column++;
+                    current++;
+                }
+                else
+                    break;
+            }
+            if (line == numRows)
+            {
+                if(line == 1)
+                {
+                    mode = 0;
+                    line = 0;
+                    column++;
+                }
+                else
+                {
+                    mode = 1;
+                    line -= 2;
+                    column++;
+                }
+            }
+            else if (line == -1)
+            {
+                mode = 0;
+                column--;
+                line += 2;
+            }
+        }
+        for (int i = 0; i < numRows; i++)
+        {
+            for (int j = 0; j < inputLength; j++)
+            {
+                if ((result[i][j] >= 65 && result[i][j] <= 90) || (result[i][j] >= 97 && result[i][j] <= 122) || result[i][j] == 46 || result[i][j] == 44)
+                {
+                    result_ += result[i][j];
+                }
+                else
+                    ;
+            }
+        }
+        return result_;
     }
 };
-#endif
